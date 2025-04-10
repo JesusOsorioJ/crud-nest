@@ -1,0 +1,58 @@
+### 1. Registrar usuario
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "123456",
+  "roles": ["user"]
+}
+
+### 2. Login y obtener token JWT
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+  "email": "test3@example.com",
+  "password": "123456"
+}
+
+### 3. Obtener perfil del usuario logueado (requiere token JWT)
+GET http://localhost:3000/auth/profile
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3RAZXhhbXBsZS5jb20iLCJzdWIiOjEsInJvbGVzIjpbIlVTRVIiXSwiaWF0IjoxNzQ0MjU0NzQ4LCJleHAiOjE3NDQyNTU2NDh9.l0aKWkI-YPmPtXzXSaRbS567iazPxDA8RUcei66M9l8
+
+### 4. Crear tarea
+POST http://localhost:3000/tasks
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QzQGV4YW1wbGUuY29tIiwic3ViIjo0LCJyb2xlcyI6WyJVU0VSIl0sImlhdCI6MTc0NDMxMzEzMywiZXhwIjoxNzQ0MzE0MDMzfQ.jJz1g6C2CGiew-Gu-jj1Cyr6_agZukwmYWBp_4Ccvic
+Content-Type: application/json
+
+{
+  "title": "Tarea de prueba9",
+  "description": "Descripción de la tarea",
+  "status": "IN_PROGRESS",
+  "dueDate": "2025-04-15T00:00:00Z"
+}
+
+### 5. Obtener todas las tareas del usuario
+GET http://localhost:3000/tasks
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QzQGV4YW1wbGUuY29tIiwic3ViIjo0LCJyb2xlcyI6WyJVU0VSIl0sImlhdCI6MTc0NDMwMzU3OCwiZXhwIjoxNzQ0MzA0NDc4fQ.qybS5yEykELbyded6VYIQi3dpt4h6Z0Pw_a6ZXoGltg
+
+### 6. Obtener una tarea por ID
+GET http://localhost:3000/tasks/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3RAZXhhbXBsZS5jb20iLCJzdWIiOjEsInJvbGVzIjpbIlVTRVIiXSwiaWF0IjoxNzQ0MjU0NzQ4LCJleHAiOjE3NDQyNTU2NDh9.l0aKWkI-YPmPtXzXSaRbS567iazPxDA8RUcei66M9l8
+
+### 7. Actualizar una tarea
+PATCH http://localhost:3000/tasks/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3RAZXhhbXBsZS5jb20iLCJzdWIiOjEsInJvbGVzIjpbIlVTRVIiXSwiaWF0IjoxNzQ0MjU0NzQ4LCJleHAiOjE3NDQyNTU2NDh9.l0aKWkI-YPmPtXzXSaRbS567iazPxDA8RUcei66M9l8
+Content-Type: application/json
+
+{
+  "title": "Tarea actualizada",
+  "description": "Nueva descripción",
+  "status": "IN_PROGRESS",
+  "dueDate": "2025-05-01T00:00:00Z"
+}
+
+### 8. Eliminar una tarea
+DELETE http://localhost:3000/tasks/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3RAZXhhbXBsZS5jb20iLCJzdWIiOjEsInJvbGVzIjpbIlVTRVIiXSwiaWF0IjoxNzQ0MjU0NzQ4LCJleHAiOjE3NDQyNTU2NDh9.l0aKWkI-YPmPtXzXSaRbS567iazPxDA8RUcei66M9l8
