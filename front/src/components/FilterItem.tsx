@@ -44,12 +44,14 @@ export default function FilterTasks({
 
   return (
     <div className="flex flex-col gap-2 bg-gray-200 rounded-md px-[30px] py-[20px]">
-      <p className="text-center w-full uppercase"> Filtro: total items {totalItems}</p>
+      <p className="text-center w-full uppercase">
+        Filtro: total items {totalItems}
+      </p>
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="flex h-fit w-full  items-center gap-[20px] "
       >
-        <div >
+        <div>
           <p className="capitalize">{t("status")}</p>
           <select
             {...register("status")}
@@ -63,7 +65,7 @@ export default function FilterTasks({
           </select>
         </div>
 
-        <div >
+        <div>
           <p className="capitalize">{t("dueDate")}</p>
           <input
             type="date"
@@ -76,14 +78,13 @@ export default function FilterTasks({
           <button
             type="button"
             onClick={() => location.reload()}
-            className="w-full uppercase  bg-[#b1b1b1]  rounded-lg bg-[--text-color] px-[20px] py-[6px] text-[--bg-color3] sm:w-fit"
+            className="w-full uppercase bg-[#b1b1b1] rounded-lg px-[20px] py-[6px] sm:w-fit"
           >
             {t("reset")}
           </button>
-            <button        className="w-full uppercase rounded-lg bg-white bg-[--text-color] px-[20px] py-[6px] text-[--bg-color3] sm:w-fit"
-            >
-              {t("search")}
-            </button>
+          <button className="w-full uppercase rounded-lg bg-white px-[20px] py-[6px] sm:w-fit">
+            {t("search")}
+          </button>
         </div>
       </form>
     </div>

@@ -63,7 +63,7 @@ const CreateItem = ({ form, setForm, setSend, setData }: Props) => {
   };
 
   return (
-    <div className="flex flex-col gap-2 items-center bg-gray-200 dark:bg-gray-800 w-full p-5 rounded-lg">
+    <div className="flex flex-col gap-2 items-center bg-gray-200 w-full p-5 rounded-lg">
       <p className="uppercase">
         {form.id ? `${t("writeMessage")} ${form.id}` : t("createRegister")}
       </p>
@@ -76,7 +76,7 @@ const CreateItem = ({ form, setForm, setSend, setData }: Props) => {
           <label className="capitalize">title</label>
           <input
             {...register("title")}
-            className="w-full p-3 bg-gray-300 dark:bg-gray-900 rounded-lg"
+            className="w-full p-3 bg-gray-300 rounded-lg"
             placeholder="usuario@example.com"
           />
         </div>
@@ -86,7 +86,7 @@ const CreateItem = ({ form, setForm, setSend, setData }: Props) => {
           <textarea
             required
             {...register("description")}
-            className="w-full p-3 bg-gray-300 dark:bg-gray-900 rounded-lg"
+            className="w-full p-3 bg-gray-300 rounded-lg"
             placeholder={t("writeMessage")}
           />
         </div>
@@ -111,7 +111,7 @@ const CreateItem = ({ form, setForm, setSend, setData }: Props) => {
             type="date"
             required
             {...register("dueDate")}
-            className="w-full p-3 bg-gray-300 dark:bg-gray-900 rounded-lg"
+            className="w-full p-3 bg-gray-300 rounded-lg"
             placeholder={t("writeMessage")}
           />
         </div>
@@ -121,7 +121,7 @@ const CreateItem = ({ form, setForm, setSend, setData }: Props) => {
             type="file"
             accept="image/*"
             {...register("image")}
-            className="w-full p-3 bg-gray-300 dark:bg-gray-900 rounded-lg"
+            className="w-full p-3 bg-gray-300 rounded-lg"
           />
         </div>
         <button

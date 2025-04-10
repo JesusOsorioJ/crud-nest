@@ -45,10 +45,10 @@ const Paginator = ({ currentPage, totalPages, onPageChange }) => {
         key={index}
         className={`page-item ${
           currentPage === page
-            ? "bg-[--primary] cursor-pointer text-[--textButton] flex justify-center items-center w-[48px] h-[40px] rounded-lg"
+            ? "cursor-pointer flex justify-center items-center w-[48px] h-[40px]"
             : currentPage === page || page != "..."
-            ? "w-[48px] h-[40px] cursor-pointer text-[--textColor] rounded-lg border-[1px] border-[--inputsBorder] flex justify-center items-center"
-            : "text-[--textColor]"
+            ? "w-[48px] h-[40px] cursor-pointer rounded-lg border-[1px] border-black flex justify-center items-center"
+            : "text-[20px]"
         }`}
         onClick={page != "..." ? () => onPageChange(page) : null}
       >

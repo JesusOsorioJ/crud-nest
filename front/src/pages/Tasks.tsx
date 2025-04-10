@@ -70,12 +70,12 @@ function App() {
   };
 
   return (
-    <div className="flex flex-col gap-10 bg-gray-100 dark:bg-gray-700 min-h-screen w-full p-10 text">
+    <div className="flex flex-col gap-10 bg-gray-800  min-h-screen w-full p-10 text">
       <div className="flex gap-2">
         <Language />
       </div>
 
-      <div className="text-black dark:text-white flex flex-col gap-2">
+      <div className="text-black flex flex-col gap-2">
         <CreateItem
           form={form}
           setForm={setForm}
@@ -89,11 +89,9 @@ function App() {
           setSend={setSend}
           setData={setData}
           setForm={setForm}
-        />
-        <Paginator
           currentPage={currentPage}
           totalPages={totalPages}
-          onPageChange={setCurrentPage}
+          setCurrentPage={setCurrentPage}
         />
       </div>
     </div>

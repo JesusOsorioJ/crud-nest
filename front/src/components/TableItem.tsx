@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Item } from "../App";
 import { deleteItem, getAllItem } from "../api/item";
 import Swal from "sweetalert2";
+import Paginator from "./Paginator";
 
 interface TableProps {
   data: Item[];
@@ -10,11 +11,23 @@ interface TableProps {
   setSend: (status: boolean) => void;
   setData: (items: Item[]) => void;
   setForm: (item: Item) => void;
+  currentPage: any;
+  totalPages: any;
+  setCurrentPage: any;
 }
 
 const baseURL = import.meta.env.VITE_BACKEND_URL;
 
-function TableItem({ data, send, setSend, setData, setForm }: TableProps) {
+function TableItem({
+  data,
+  send,
+  setSend,
+  setData,
+  setForm,
+  currentPage,
+  totalPages,
+  setCurrentPage,
+}: TableProps) {
   const { t } = useTranslation();
 
   const handleDelete = async (id?: number) => {
@@ -37,9 +50,9 @@ function TableItem({ data, send, setSend, setData, setForm }: TableProps) {
   };
 
   return (
-    <div className="flex flex-col gap-2 items-center bg-gray-200 dark:bg-gray-800 w-full p-5 rounded-lg">
-      <p className="text-[20px]">{t("registerTable")}</p>
-      <table className="w-full p-3 bg-gray-300 dark:bg-gray-900 rounded-lg text-center">
+    <div className="flex flex-col gap-2 items-center bg-gray-200 w-full p-5 rounded-lg">
+      <p className="uppercase">{t("registerTable")}</p>
+      <table className="w-full p-3  rounded-lg text-center">
         <thead>
           <tr className="uppercase">
             <th>ID</th>
@@ -66,7 +79,7 @@ function TableItem({ data, send, setSend, setData, setForm }: TableProps) {
               <td>
                 {d.imageUrl && (
                   <img
-                    src={`${baseURL}/uploads/${d.imageUrl}`} // Ajusta según tu ruta pública
+                    src={`${baseURL}/uploads/${d.imageUrl}`}
                     alt="task-img"
                     className="w-16 h-16 object-cover rounded"
                   />
@@ -96,12 +109,17 @@ function TableItem({ data, send, setSend, setData, setForm }: TableProps) {
       )}
 
       {send && (
-        <div className="flex gap-2 bg-gray-300 dark:bg-gray-900 p-4 rounded animate-pulse">
-          <div className="h-2 w-2 rounded-full bg-black dark:bg-white" />
-          <div className="h-2 w-2 rounded-full bg-black dark:bg-white" />
-          <div className="h-2 w-2 rounded-full bg-black dark:bg-white" />
+        <div className="flex gap-2 bg-gray-300 p-4 rounded animate-pulse">
+          <div className="h-2 w-2 rounded-full bg-black" />
+          <div className="h-2 w-2 rounded-full bg-black" />
+          <div className="h-2 w-2 rounded-full bg-black" />
         </div>
       )}
+      <Paginator
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={setCurrentPage}
+      />
     </div>
   );
 }

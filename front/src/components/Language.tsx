@@ -16,7 +16,7 @@ function Language() {
         <button
           onClick={() => changeLanguage("es")}
           className={`p-[6px] rounded-l-lg ${
-            currentLanguage === "es"
+            currentLanguage === "en"
               ? "bg-black text-white"
               : "bg-white text-black"
           }`}
@@ -26,7 +26,7 @@ function Language() {
         <button
           onClick={() => changeLanguage("en")}
           className={`p-[6px] rounded-r-lg ${
-            currentLanguage === "en"
+            currentLanguage === "es"
               ? "bg-black text-white"
               : "bg-white text-black"
           }`}
