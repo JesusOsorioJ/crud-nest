@@ -96,13 +96,36 @@ export class TasksController {
     return this.tasksService.findOne(+id, req.user);
   }
 
-  @ApiOperation({ summary: 'Actualizar tarea' })
+  @ApiOperation({ summary: 'Actualizar tarea con o sin imagen' })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    description:
+      'Datos de la tarea junto con una nueva imagen opcional (campo "image")',
+    type: UpdateTaskDto,
+  })
   @Patch(':id')
+  @UseInterceptors(
+    FileInterceptor('image', {
+      storage: diskStorage({
+        destination: './uploads',
+        filename: (req, file, cb) => {
+          const uniqueSuffix =
+            Date.now() + '-' + Math.round(Math.random() * 1e9);
+          const ext = file.originalname.split('.').pop();
+          cb(null, `${file.fieldname}-${uniqueSuffix}.${ext}`);
+        },
+      }),
+    }),
+  )
   async update(
     @Param('id') id: string,
+    @UploadedFile() file: Express.Multer.File,
     @Body() updateTaskDto: UpdateTaskDto,
     @Request() req: RequestWithUser,
   ) {
+    if (file) {
+      updateTaskDto.imageUrl = file.filename;
+    }
     return this.tasksService.update(+id, updateTaskDto, req.user);
   }
 
