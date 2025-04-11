@@ -184,6 +184,8 @@ La API cuenta con documentación Swagger generada automáticamente a partir de l
 
 - Permite probar todos los endpoints, incluidos los protegidos (usa el botón "Authorize" para agregar el token JWT en el formato Bearer <token>).
 
+- Archivo para probar los endpoint y guia de forma de request. En `/back/example.rest`.
+
 ---
 
 ## Testing
