@@ -1,4 +1,5 @@
 import axios, { AxiosResponse } from "axios";
+import { Item } from "../pages/Tasks";
 
 const baseURL = import.meta.env.VITE_BACKEND_URL;
 
@@ -8,6 +9,13 @@ export interface Message {
   createdAt: number;
 }
 
+interface GetAllItemResponse {
+    totalItems: number;
+    totalPages: number;
+    data: Item[];
+}
+
+// Interceptor de solicitudes para agregar el token
 export const authApi = axios.create({
   baseURL,
 });
@@ -25,6 +33,7 @@ authApi.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
+// Interceptor de respuestas para manejar errores 401
 authApi.interceptors.response.use(
   (response) => response,
   (error) => {
@@ -38,10 +47,10 @@ authApi.interceptors.response.use(
 );
 
 export const getAllItem = async (
-  query = ""
-): Promise<AxiosResponse<Message[]> | null> => {
+  query: string = ""
+): Promise<AxiosResponse<GetAllItemResponse> | null> => {
   try {
-    const response = await authApi.get(`${baseURL}/tasks?${query}`);
+    const response: AxiosResponse<GetAllItemResponse> = await authApi.get(`/tasks?${query}`);
     return response;
   } catch (error) {
     console.error("Error fetching item:", error);
@@ -49,45 +58,50 @@ export const getAllItem = async (
   }
 };
 
-export const newItem = async (body): Promise<AxiosResponse<Message> | null> => {
+// Función para crear un nuevo item
+export const newItem = async (
+  body: Item
+): Promise<AxiosResponse<Item> | null> => {
   try {
-    const response = await authApi.post(`${baseURL}/tasks/upload`, body, {
+    const response: AxiosResponse<Item> = await authApi.post(`/tasks/upload`, body, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
     });
     return response;
   } catch (error) {
-    console.error("Error sending message:", error);
+    console.error("Error sending item:", error);
     return null;
   }
 };
 
+// Función para actualizar un item
 export const updateItem = async (
   id: number,
-  body
-): Promise<AxiosResponse<Message> | null> => {
+  body: Item
+): Promise<AxiosResponse<Item> | null> => {
   try {
-    const response = await authApi.patch(`${baseURL}/tasks/${id}`, body, {
+    const response: AxiosResponse<Item> = await authApi.patch(`/tasks/${id}`, body, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
     });
     return response;
   } catch (error) {
-    console.error("Error sending message:", error);
+    console.error("Error sending item", error);
     return null;
   }
 };
 
+// Función para eliminar un item
 export const deleteItem = async (
   id: number
 ): Promise<AxiosResponse<void> | null> => {
   try {
-    const response = await authApi.delete(`${baseURL}/tasks/${id}`);
+    const response: AxiosResponse<void> = await authApi.delete(`/tasks/${id}`);
     return response;
   } catch (error) {
-    console.error("Error deleting item:", error);
+    console.error("Error deleting item", error);
     return null;
   }
 };

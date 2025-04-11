@@ -1,9 +1,10 @@
 import { format } from "date-fns";
 import { useTranslation } from "react-i18next";
-import { Item } from "../App";
 import { deleteItem, getAllItem } from "../api/item";
 import Swal from "sweetalert2";
 import Paginator from "./Paginator";
+import { Dispatch, SetStateAction } from "react";
+import { Item } from "../pages/Tasks";
 
 interface TableProps {
   data: Item[];
@@ -11,9 +12,9 @@ interface TableProps {
   setSend: (status: boolean) => void;
   setData: (items: Item[]) => void;
   setForm: (item: Item) => void;
-  currentPage: any;
-  totalPages: any;
-  setCurrentPage: any;
+  currentPage: number;
+  totalPages: number;
+  setCurrentPage: Dispatch<SetStateAction<number>>;
 }
 
 const baseURL = import.meta.env.VITE_BACKEND_URL;
@@ -118,7 +119,7 @@ function TableItem({
       <Paginator
         currentPage={currentPage}
         totalPages={totalPages}
-        onPageChange={setCurrentPage}
+        setCurrentPage={setCurrentPage}
       />
     </div>
   );

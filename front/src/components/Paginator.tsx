@@ -1,4 +1,16 @@
-const Paginator = ({ currentPage, totalPages, onPageChange }) => {
+import { Dispatch, SetStateAction } from "react";
+
+interface PaginatorProps {
+  currentPage: number;
+  totalPages: number;
+  setCurrentPage: Dispatch<SetStateAction<number>>;
+}
+
+const Paginator: React.FC<PaginatorProps> = ({
+  currentPage,
+  totalPages,
+  setCurrentPage,
+}) => {
   const generarPaginador = () => {
     const totalPaginas = totalPages,
       paginaActual = currentPage;
@@ -50,7 +62,9 @@ const Paginator = ({ currentPage, totalPages, onPageChange }) => {
             ? "w-[48px] h-[40px] cursor-pointer rounded-lg border-[1px] border-black flex justify-center items-center"
             : "text-[20px]"
         }`}
-        onClick={page != "..." ? () => onPageChange(page) : null}
+        onClick={() => {
+          if (typeof page === "number") setCurrentPage(page);
+        }}
       >
         {page === "..." ? page : <span>{page}</span>}
       </div>

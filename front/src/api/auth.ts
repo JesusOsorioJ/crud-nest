@@ -1,30 +1,37 @@
 import axios, { AxiosResponse } from "axios";
 
-const baseURL = import.meta.env.VITE_BACKEND_URL;
-
-export interface Message {
-  sender: string;
-  content: string;
-  createdAt: number;
+interface UserCredentials {
+  email: string;
+  password: string;
+  role?: Array<string>
 }
 
-export const registerUser = async (body) => {
+interface AuthResponse {
+  access_token: string;
+  refresh_token: string;
+}
+
+// Establecer la URL base para las solicitudes
+const baseURL = import.meta.env.VITE_BACKEND_URL;
+
+// Registro de usuario
+export const registerUser = async (body: UserCredentials): Promise<AxiosResponse<AuthResponse> | null> => {
   try {
     const response = await axios.post(`${baseURL}/auth/register`, body);
     return response;
   } catch (error) {
-    console.error("Error fetching item:", error);
+    console.error("Error en el registro:", error);
     return null;
   }
 };
 
-
-export const loginUser = async (body) => {
+// Login de usuario
+export const loginUser = async (body: UserCredentials): Promise<AxiosResponse<AuthResponse> | null> => {
   try {
     const response = await axios.post(`${baseURL}/auth/login`, body);
     return response;
   } catch (error) {
-    console.error("Error fetching item:", error);
+    console.error("Error en el login:", error);
     return null;
   }
 };

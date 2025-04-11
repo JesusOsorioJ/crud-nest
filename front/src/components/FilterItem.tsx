@@ -4,13 +4,11 @@ import { useTranslation } from "react-i18next";
 
 // Define types for the form data
 interface FormData {
-  assignedTo?: string;
-  priority?: string;
   status?: string;
-  order?: string;
+  dueDate?: string;
 }
 
-export enum TaskStatus {
+enum TaskStatus {
   TODO = "TODO",
   IN_PROGRESS = "IN_PROGRESS",
   DONE = "DONE",
@@ -18,7 +16,7 @@ export enum TaskStatus {
 
 interface FilterTasksProps {
   setFilter: (filter: string) => void;
-  totalItems: string;
+  totalItems: number;
 }
 
 export default function FilterTasks({
