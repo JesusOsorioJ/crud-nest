@@ -39,6 +39,7 @@ describe('App E2E (e2e)', () => {
       .send({
         email,
         password,
+        role: [ "USER" ]
       })
       .expect(HttpStatus.CREATED)
       .then((response) => {

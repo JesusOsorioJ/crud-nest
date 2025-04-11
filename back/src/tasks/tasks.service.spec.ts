@@ -1,22 +1,26 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { TasksService } from './tasks.service';
-import { Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Task, TaskStatus } from './entities/task.entity';
-import { User } from '../users/entities/user.entity';
+import { TaskGateway } from './task.gateway';
+import { Repository } from 'typeorm';
+import { User } from 'src/users/entities/user.entity';
 import { NotFoundException } from '@nestjs/common';
+
+const fakeTaskGateway = {
+  emitTaskCreated: jest.fn(),
+  emitTaskUpdated: jest.fn(),
+};
 
 describe('TasksService', () => {
   let tasksService: TasksService;
   let tasksRepository: Partial<Repository<Task>>;
 
   beforeEach(async () => {
-    const tasks: Task[] = [];
     tasksRepository = {
       create: jest.fn().mockImplementation((dto) => ({ ...dto })),
       save: jest.fn().mockImplementation((entity) => {
-        entity.id = tasks.length + 1;
-        tasks.push(entity);
+        entity.id = 1;
         return Promise.resolve(entity);
       }),
       createQueryBuilder: jest.fn().mockReturnValue({
@@ -24,19 +28,20 @@ describe('TasksService', () => {
         andWhere: jest.fn().mockReturnThis(),
         skip: jest.fn().mockReturnThis(),
         take: jest.fn().mockReturnThis(),
-        getMany: jest.fn().mockResolvedValue(tasks),
+        getMany: jest.fn().mockResolvedValue([]),
       }),
       findOne: jest.fn().mockImplementation(({ where: { id } }) => {
-        const task = tasks.find((t) => t.id === id);
-        return Promise.resolve(task);
+        return Promise.resolve(null);
       }),
-      delete: jest.fn().mockImplementation((id) => Promise.resolve({ affected: 1 })),
+      update: jest.fn().mockResolvedValue({}),
+      delete: jest.fn().mockResolvedValue({ affected: 1 }),
     };
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         TasksService,
         { provide: getRepositoryToken(Task), useValue: tasksRepository },
+        { provide: TaskGateway, useValue: fakeTaskGateway },
       ],
     }).compile();
 
