@@ -2,6 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { loginUser } from "../api/auth";
 import Swal from "sweetalert2";
+import { useTranslation } from "react-i18next";
 
 interface FormData {
   email: string;
@@ -11,6 +12,7 @@ interface FormData {
 const Login = () => {
   const { register, handleSubmit } = useForm<FormData>();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const onSubmit: SubmitHandler<FormData> = async (formData: FormData) => {
     try {
@@ -22,13 +24,13 @@ const Login = () => {
       if (response && response.status === 200) {
         localStorage.setItem("access_token", response.data.access_token);
         localStorage.setItem("refresh_token", response.data.refresh_token);
-        navigate("/"); 
+        navigate("/");
       } else {
-        Swal.fire("Login fallido", "Las credenciales no son válidas.", "error");
+        Swal.fire(t("loginFailed"), t("invalidCredentials"), "error");
       }
     } catch {
       // Manejo de errores si la llamada API falla
-      Swal.fire("Error en el login", "Hubo un problema con la conexión.", "error");
+      Swal.fire(t("loginError"), t("connectionProblem"), "error");
     }
   };
 
@@ -45,10 +47,10 @@ const Login = () => {
         </span>
       </Link>
       <div className="bg-white p-8 rounded shadow-md w-full max-w-md">
-        <h1 className="text-2xl font-bold mb-6 text-center">Iniciar Sesión</h1>
+        <h1 className="text-2xl font-bold mb-6 text-center">{t("login")}</h1>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-4">
-            <label className="block mb-2">Correo electrónico</label>
+            <label className="block mb-2">{t("email")}</label>
             <input
               type="email"
               required
@@ -58,7 +60,7 @@ const Login = () => {
             />
           </div>
           <div className="mb-6">
-            <label className="block mb-2">Contraseña</label>
+            <label className="block mb-2">{t("password")}</label>
             <input
               type="password"
               required
@@ -71,13 +73,13 @@ const Login = () => {
             type="submit"
             className="w-full bg-blue-500 text-white p-2 rounded"
           >
-            Entrar
+            {t("enter")}
           </button>
         </form>
         <p className="mt-4 text-center">
-          ¿No tienes una cuenta?{" "}
+          {t("noAccount")}{" "}
           <Link to="/register" className="text-blue-500">
-            Regístrate
+            {t("register")}
           </Link>
         </p>
       </div>

@@ -33,8 +33,17 @@ function TableItem({
 
   const handleDelete = async (id?: number) => {
     if (!id) return;
-    const isConfirmed = window.confirm(t("sureTodelete"));
-    if (!isConfirmed) return;
+
+    const result = await Swal.fire({
+      title: t("areYouSure"),
+      text: t("thisActionIsIrreversible"),
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: t("yesDelete"),
+      cancelButtonText: t("cancel"),
+    });
+
+    if (!result.isConfirmed) return;
 
     setSend(true);
     try {
@@ -43,8 +52,9 @@ function TableItem({
       if (res?.data && Array.isArray(res.data)) {
         setData(res.data);
       }
+      Swal.fire(t("deleted"), t("itemDeletedSuccessfully"), "success");
     } catch {
-      Swal.fire("Error deleting message:");
+      Swal.fire("Error", "Error deleting task", "error");
     } finally {
       setSend(false);
     }
@@ -53,15 +63,16 @@ function TableItem({
   return (
     <div className="flex flex-col gap-2 items-center bg-gray-200 w-full p-5 rounded-lg">
       <p className="uppercase">{t("registerTable")}</p>
-      <table className="w-full p-3  rounded-lg text-center">
+      <table className="w-full p-3 rounded-lg text-center">
         <thead>
           <tr className="uppercase">
-            <th>ID</th>
-            <th>{t("title")}</th>
-            <th>{t("description")}</th>
-            <th>{t("status")}</th>
-            <th>{t("dueDate")}</th>
-            <th>{t("image")}</th>
+            <th scope="col">ID</th>
+            <th scope="col">{t("title")}</th>
+            <th scope="col">{t("description")}</th>
+            <th scope="col">{t("status")}</th>
+            <th scope="col">{t("dueDate")}</th>
+            <th scope="col">{t("image")}</th>
+            <th scope="col">{t("actions")}</th>
           </tr>
         </thead>
         <tbody>
@@ -71,7 +82,6 @@ function TableItem({
               <td>{d.title}</td>
               <td>{d.description}</td>
               <td>{d.status}</td>
-
               <td>
                 {d.dueDate
                   ? format(new Date(d.dueDate), "MM/dd/yyyy pp")
@@ -86,16 +96,18 @@ function TableItem({
                   />
                 )}
               </td>
-              <td className="flex gap-1 justify-center">
+              <td className="flex gap-2 justify-center py-2">
                 <button
                   onClick={() => handleDelete(d.id)}
-                  className="px-1 text-[20px] rounded-br-lg rounded"
+                  className="text-red-600 hover:text-red-800 text-xl"
+                  title={t("delete")}
                 >
                   🗑️
                 </button>
                 <button
                   onClick={() => setForm(d)}
-                  className="px-1 text-[20px] rounded-br-lg rounded"
+                  className="text-blue-600 hover:text-blue-800 text-xl"
+                  title={t("edit")}
                 >
                   ✏️
                 </button>

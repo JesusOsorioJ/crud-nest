@@ -2,7 +2,6 @@
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
-// Define types for the form data
 interface FormData {
   status?: string;
   dueDate?: string;
@@ -24,30 +23,26 @@ export default function FilterTasks({
   totalItems,
 }: FilterTasksProps) {
   const { t } = useTranslation();
-
   const { register, handleSubmit } = useForm<FormData>();
 
   const onSubmit: SubmitHandler<FormData> = async (formData) => {
     let result = Object.entries(formData)
       .filter(([, value]) => value !== "")
-      .map(([key, value]) => {
-        return `${key}=${value}`;
-      })
+      .map(([key, value]) => `${key}=${value}`)
       .join("&");
 
     result = result.trim() !== "" ? result.replace("+", "\\%2B") : result;
     setFilter(result);
-    return;
   };
 
   return (
     <div className="flex flex-col gap-2 bg-gray-200 rounded-md px-[30px] py-[20px]">
       <p className="text-center w-full uppercase">
-        Filtro: total items {totalItems}
+        {t("filter")}: {t("totalItems")} {totalItems}
       </p>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="flex h-fit w-full  items-center gap-[20px] "
+        className="flex h-fit w-full items-center gap-[20px] flex-wrap"
       >
         <div>
           <p className="capitalize">{t("status")}</p>
@@ -56,7 +51,7 @@ export default function FilterTasks({
             defaultValue=""
             className="w-full rounded-md p-3 text-black focus:outline-none"
           >
-            <option value="">--</option>
+            <option value="">{t("all")}</option>
             <option value={TaskStatus.TODO}>TODO</option>
             <option value={TaskStatus.IN_PROGRESS}>IN_PROGRESS</option>
             <option value={TaskStatus.DONE}>DONE</option>
@@ -72,7 +67,7 @@ export default function FilterTasks({
           />
         </div>
 
-        <div className="flex flex-col  items-center justify-between gap-[10px] pt-[20px] sm:flex-row">
+        <div className="flex flex-col items-center justify-between gap-[10px] pt-[20px] sm:flex-row">
           <button
             type="button"
             onClick={() => location.reload()}

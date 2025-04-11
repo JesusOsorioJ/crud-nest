@@ -49,10 +49,10 @@ const CreateItem = ({ form, setForm, setSend }: Props) => {
       if (response && (response.status === 200 || response.status === 201)) {
         reset({});
       } else {
-        Swal.fire("Error", "Tarea fallida", "error");
+        Swal.fire(t("error"), t("taskFailed"), "error");
       }
     } catch {
-      Swal.fire("Error", "Error en la tarea", "error");
+      Swal.fire(t("error"), t("taskError"), "error");
     } finally {
       setForm({} as Item);
       setSend(false);
@@ -62,7 +62,7 @@ const CreateItem = ({ form, setForm, setSend }: Props) => {
   return (
     <div className="flex flex-col gap-2 items-center bg-gray-200 w-full p-5 rounded-lg">
       <p className="uppercase">
-        {form.id ? `${t("writeMessage")} ${form.id}` : t("createRegister")}
+        {form.id ? `${t("editTask")} ${form.id}` : t("createRegister")}
       </p>
 
       <form
@@ -70,15 +70,15 @@ const CreateItem = ({ form, setForm, setSend }: Props) => {
         onSubmit={handleSubmit(onSubmit)}
       >
         <div>
-          <label className="capitalize">Title</label>
+          <label className="capitalize">{t("title")}</label>
           <input
             {...register("title")}
             className="w-full p-3 bg-gray-300 rounded-lg"
-            placeholder="Usuario@example.com"
+            placeholder={t("titlePlaceholder")}
           />
         </div>
         <div>
-          <label className="capitalize">Description</label>
+          <label className="capitalize">{t("description")}</label>
           <textarea
             required
             {...register("description")}
@@ -87,7 +87,7 @@ const CreateItem = ({ form, setForm, setSend }: Props) => {
           />
         </div>
         <div>
-          <label className="capitalize">Status</label>
+          <label className="capitalize">{t("status")}</label>
           <select
             required
             {...register("status")}
@@ -100,7 +100,7 @@ const CreateItem = ({ form, setForm, setSend }: Props) => {
           </select>
         </div>
         <div>
-          <label className="capitalize">Due Date</label>
+          <label className="capitalize">{t("dueDate")}</label>
           <input
             type="date"
             required
@@ -109,7 +109,7 @@ const CreateItem = ({ form, setForm, setSend }: Props) => {
           />
         </div>
         <div>
-          <label className="capitalize">Image</label>
+          <label className="capitalize">{t("image")}</label>
           <input
             type="file"
             accept="image/*"
@@ -125,13 +125,13 @@ const CreateItem = ({ form, setForm, setSend }: Props) => {
           }}
           className="px-5 bg-[#b1b1b1] py-[6px] rounded-lg self-center uppercase"
         >
-          Cancelar
+          {t("cancel")}
         </button>
         <button
           type="submit"
           className="px-5 bg-blue-500 text-white py-[6px] rounded-lg self-center uppercase"
         >
-          Enviar
+          {t("send")}
         </button>
       </form>
     </div>

@@ -2,6 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { registerUser } from "../api/auth";
 import Swal from "sweetalert2";
+import { useTranslation } from "react-i18next";
 
 interface FormData {
   email: string;
@@ -12,6 +13,7 @@ interface FormData {
 const Register = () => {
   const { register, handleSubmit } = useForm<FormData>();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const onSubmit: SubmitHandler<FormData> = async (formData) => {
     try {
@@ -22,18 +24,18 @@ const Register = () => {
       });
 
       if (response!.status === 201) {
-        Swal.fire("Registro exitoso");
+        Swal.fire(t("registerSuccess"));
         navigate("/login");
       } else {
-        Swal.fire("Registro fallido", "Las credenciales no son válidas.", "error");
+        Swal.fire(t("registerFailed"), t("invalidCredentials"), "error");
       }
     } catch {
-        Swal.fire("Error en el registro", "Hubo un problema con la conexión.", "error");
+      Swal.fire(t("registerError"), t("connectionProblem"), "error");
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-800 gap-3 flex flex-col items-center  justify-center">
+    <div className="min-h-screen bg-gray-800 gap-3 flex flex-col items-center justify-center">
       <Link to="/" className="flex ms-2">
         <img
           src="https://flowbite.com/docs/images/logo.svg"
@@ -45,10 +47,10 @@ const Register = () => {
         </span>
       </Link>
       <div className="bg-white p-8 rounded shadow-md w-full max-w-md">
-        <h1 className="text-2xl font-bold mb-6 text-center">Registro</h1>
+        <h1 className="text-2xl font-bold mb-6 text-center">{t("register")}</h1>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-4">
-            <label className="block mb-2">Correo electrónico</label>
+            <label className="block mb-2">{t("email")}</label>
             <input
               type="email"
               {...register("email")}
@@ -57,7 +59,7 @@ const Register = () => {
             />
           </div>
           <div className="mb-4">
-            <label className="block mb-2">Contraseña</label>
+            <label className="block mb-2">{t("password")}</label>
             <input
               type="password"
               {...register("password")}
@@ -66,27 +68,26 @@ const Register = () => {
             />
           </div>
           <div className="mb-6">
-            <label className="block mb-2">Rol</label>
-
+            <label className="block mb-2">{t("role")}</label>
             <select
               {...register("role")}
               className="w-full border border-gray-300 p-2 rounded"
             >
-              <option value="USER">USER</option>
-              <option value="ADMIN">ADMIN</option>
+              <option value="USER">{t("userRole")}</option>
+              <option value="ADMIN">{t("adminRole")}</option>
             </select>
           </div>
           <button
             type="submit"
             className="w-full bg-green-500 text-white p-2 rounded"
           >
-            Registrarse
+            {t("register")}
           </button>
         </form>
         <p className="mt-4 text-center">
-          ¿Ya tienes una cuenta?{" "}
+          {t("alreadyHaveAccount")}{" "}
           <Link to="/login" className="text-blue-500">
-            Inicia Sesión
+            {t("login")}
           </Link>
         </p>
       </div>

@@ -6,6 +6,7 @@ import TableItem from "../components/TableItem";
 import FilterTasks from "../components/FilterItem";
 import { io } from "socket.io-client";
 import Swal from "sweetalert2";
+import { useTranslation } from "react-i18next";
 
 export interface Item {
   id?: number;
@@ -30,21 +31,39 @@ function App() {
   const [totalPages, setTotalPages] = useState<number>(0);
   const [totalItems, setTotalItems] = useState<number>(0);
   const limit = 5;
+  const { t } = useTranslation();
 
   useEffect(() => {
-    socket.on("taskCreated", (task) => {
-      Swal.fire(`Tarea creada Titulo: ${task.title}`);
+    const handleTaskCreated = (task: { title: string }) => {
+      Swal.fire({
+        icon: "success",
+        title: t("taskCreated"),
+        text: `${t("title")}: ${task.title}`,
+        timer: 3000,
+        timerProgressBar: true,
+        showConfirmButton: false,
+      });
       filterPurchases(1);
-    });
+    };
 
-    socket.on("taskUpdated", (task) => {
-      Swal.fire(`Tarea actualizada Titulo: ${task.title}`);
+    const handleTaskUpdated = (task: { title: string }) => {
+      Swal.fire({
+        icon: "info",
+        title: t("taskUpdated"),
+        text: `${t("title")}: ${task.title}`,
+        timer: 3000,
+        timerProgressBar: true,
+        showConfirmButton: false,
+      });
       filterPurchases(1);
-    });
+    };
+
+    socket.on("taskCreated", handleTaskCreated);
+    socket.on("taskUpdated", handleTaskUpdated);
 
     return () => {
-      socket.off("taskCreated");
-      socket.off("taskUpdated");
+      socket.off("taskCreated", handleTaskCreated);
+      socket.off("taskUpdated", handleTaskUpdated);
     };
   }, []);
 
@@ -62,13 +81,13 @@ function App() {
       const resp = await getAllItem(
         `page=${page}&limit=${limit}&purchaseView=true&${filter}`
       );
-      if(resp){
+      if (resp) {
         setTotalItems(resp.data.totalItems);
         setTotalPages(resp.data.totalPages);
         setData(resp.data.data);
       }
     } catch {
-      Swal.fire("Error fetching messages");
+      Swal.fire(t("fetchError"));
     } finally {
       setSend(false);
     }
@@ -81,11 +100,7 @@ function App() {
       </div>
 
       <div className="text-black flex flex-col gap-2">
-        <CreateItem
-          form={form}
-          setForm={setForm}
-          setSend={setSend}
-        />
+        <CreateItem form={form} setForm={setForm} setSend={setSend} />
         <FilterTasks setFilter={setFilter} totalItems={totalItems} />
         <TableItem
           data={data}
