@@ -4,14 +4,17 @@ import { getAllItem } from "../api/item";
 import CreateItem from "../components/CreateItem";
 import TableItem from "../components/TableItem";
 import FilterTasks from "../components/FilterItem";
-import Paginator from "../components/Paginator";
 import { io } from "socket.io-client";
 import Swal from "sweetalert2";
 
 export interface Item {
   id?: number;
-  content: string;
-  updatedAt?: string;
+  title?: string;
+  description?: string;
+  status?: string;
+  dueDate?: string;
+  image?: string;
+  imageUrl?: string;
 }
 
 const baseURL = import.meta.env.VITE_BACKEND_URL;
@@ -20,12 +23,12 @@ const socket = io(baseURL);
 function App() {
   const [send, setSend] = useState<boolean>(false);
   const [data, setData] = useState<Item[]>([]);
-  const [form, setForm] = useState<Item>({ content: "" });
+  const [form, setForm] = useState<Item>({});
 
-  const [filter, setFilter] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(0);
-  const [totalItems, setTotalItems] = useState(0);
+  const [filter, setFilter] = useState<string>("");
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(0);
+  const [totalItems, setTotalItems] = useState<number>(0);
   const limit = 5;
 
   useEffect(() => {
@@ -53,15 +56,17 @@ function App() {
     filterPurchases(currentPage);
   }, [currentPage]);
 
-  const filterPurchases = async (page) => {
+  const filterPurchases = async (page: number): Promise<void> => {
     try {
       setSend(true);
       const resp = await getAllItem(
         `page=${page}&limit=${limit}&purchaseView=true&${filter}`
       );
-      setTotalItems(resp.data.totalItems);
-      setTotalPages(resp.data.totalPages);
-      setData(resp.data.data);
+      if(resp){
+        setTotalItems(resp.data.totalItems);
+        setTotalPages(resp.data.totalPages);
+        setData(resp.data.data);
+      }
     } catch {
       Swal.fire("Error fetching messages");
     } finally {
@@ -70,7 +75,7 @@ function App() {
   };
 
   return (
-    <div className="flex flex-col gap-10 bg-gray-800  min-h-screen w-full p-10 text">
+    <div className="flex flex-col gap-10 bg-gray-800 min-h-screen w-full p-10 text">
       <div className="flex gap-2">
         <Language />
       </div>
@@ -79,7 +84,6 @@ function App() {
         <CreateItem
           form={form}
           setForm={setForm}
-          setData={setData}
           setSend={setSend}
         />
         <FilterTasks setFilter={setFilter} totalItems={totalItems} />

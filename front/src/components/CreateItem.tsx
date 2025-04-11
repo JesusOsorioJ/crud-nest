@@ -1,36 +1,33 @@
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { newItem, updateItem } from "../api/item";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import Swal from "sweetalert2";
 import { format } from "date-fns";
-
-interface FormData {
-  title?: string;
-  description?: string;
-  status?: string;
-  dueDate?: string;
-  image: any;
-}
+import { Item } from "../pages/Tasks";
 
 interface Props {
   form: Item;
   setForm: (item: Item) => void;
   setSend: (status: boolean) => void;
-  setData: (items: Item[]) => void;
 }
 
-const CreateItem = ({ form, setForm, setSend, setData }: Props) => {
+const CreateItem = ({ form, setForm, setSend }: Props) => {
   const { t } = useTranslation();
-  const { register, handleSubmit, reset } = useForm<FormData>();
+  const { register, handleSubmit, reset } = useForm<Item>({
+    defaultValues: form,
+  });
 
   useEffect(() => {
     if (form.dueDate) {
-      reset({ ...form, dueDate: format(form.dueDate, "yyyy-MM-dd") });
+      reset({
+        ...form,
+        dueDate: format(form.dueDate, "yyyy-MM-dd"),
+      });
     }
-  }, [form]);
+  }, [form, reset]);
 
-  const onSubmit: SubmitHandler<FormData> = async (formData) => {
+  const onSubmit: SubmitHandler<Item> = async (formData) => {
     try {
       setSend(true);
       let response;
@@ -40,7 +37,7 @@ const CreateItem = ({ form, setForm, setSend, setData }: Props) => {
         description: formData.description,
         status: formData.status,
         dueDate: formData.dueDate,
-        image: formData.image[0],
+        image: formData.image?.[0],
       };
 
       if (form.id) {
@@ -49,15 +46,15 @@ const CreateItem = ({ form, setForm, setSend, setData }: Props) => {
         response = await newItem(payload);
       }
 
-      if (response!.status === 201 || response!.status === 200) {
+      if (response && (response.status === 200 || response.status === 201)) {
         reset({});
       } else {
-        Swal.fire("Tarea fallido");
+        Swal.fire("Error", "Tarea fallida", "error");
       }
     } catch {
-      Swal.fire("Error en la Tarea:");
+      Swal.fire("Error", "Error en la tarea", "error");
     } finally {
-      setForm({});
+      setForm({} as Item);
       setSend(false);
     }
   };
@@ -73,16 +70,15 @@ const CreateItem = ({ form, setForm, setSend, setData }: Props) => {
         onSubmit={handleSubmit(onSubmit)}
       >
         <div>
-          <label className="capitalize">title</label>
+          <label className="capitalize">Title</label>
           <input
             {...register("title")}
             className="w-full p-3 bg-gray-300 rounded-lg"
-            placeholder="usuario@example.com"
+            placeholder="Usuario@example.com"
           />
         </div>
         <div>
-          <label className="capitalize">description</label>
-
+          <label className="capitalize">Description</label>
           <textarea
             required
             {...register("description")}
@@ -91,13 +87,12 @@ const CreateItem = ({ form, setForm, setSend, setData }: Props) => {
           />
         </div>
         <div>
-          <label className="capitalize">status</label>
-
+          <label className="capitalize">Status</label>
           <select
             required
-            defaultValue="TODO"
             {...register("status")}
             className="w-full border border-gray-300 p-2 rounded"
+            defaultValue="TODO"
           >
             <option value="TODO">TODO</option>
             <option value="IN_PROGRESS">IN_PROGRESS</option>
@@ -105,18 +100,16 @@ const CreateItem = ({ form, setForm, setSend, setData }: Props) => {
           </select>
         </div>
         <div>
-          <label className="capitalize">dueDate</label>
-
+          <label className="capitalize">Due Date</label>
           <input
             type="date"
             required
             {...register("dueDate")}
             className="w-full p-3 bg-gray-300 rounded-lg"
-            placeholder={t("writeMessage")}
           />
         </div>
         <div>
-          <label className="capitalize">Imagen</label>
+          <label className="capitalize">Image</label>
           <input
             type="file"
             accept="image/*"
@@ -127,14 +120,17 @@ const CreateItem = ({ form, setForm, setSend, setData }: Props) => {
         <button
           type="button"
           onClick={() => {
-            setForm({});
+            setForm({} as Item);
             reset({});
           }}
           className="px-5 bg-[#b1b1b1] py-[6px] rounded-lg self-center uppercase"
         >
           Cancelar
         </button>
-        <button className="px-5 bg-white py-[6px]  rounded-lg self-center uppercase">
+        <button
+          type="submit"
+          className="px-5 bg-blue-500 text-white py-[6px] rounded-lg self-center uppercase"
+        >
           Enviar
         </button>
       </form>

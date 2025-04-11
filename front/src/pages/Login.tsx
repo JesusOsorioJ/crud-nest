@@ -4,35 +4,36 @@ import { loginUser } from "../api/auth";
 import Swal from "sweetalert2";
 
 interface FormData {
-  email?: string;
-  password?: string;
+  email: string;
+  password: string;
 }
 
 const Login = () => {
   const { register, handleSubmit } = useForm<FormData>();
   const navigate = useNavigate();
 
-  const onSubmit: SubmitHandler<FormData> = async (formData) => {
+  const onSubmit: SubmitHandler<FormData> = async (formData: FormData) => {
     try {
       const response = await loginUser({
         email: formData.email,
         password: formData.password,
       });
 
-      if (response!.status === 200) {
+      if (response && response.status === 200) {
         localStorage.setItem("access_token", response.data.access_token);
         localStorage.setItem("refresh_token", response.data.refresh_token);
-        navigate("/");
+        navigate("/"); 
       } else {
-        Swal.fire("Login fallido");
+        Swal.fire("Login fallido", "Las credenciales no son válidas.", "error");
       }
     } catch {
-      Swal.fire("Error en el login:");
+      // Manejo de errores si la llamada API falla
+      Swal.fire("Error en el login", "Hubo un problema con la conexión.", "error");
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-800 gap-3 flex flex-col items-center  justify-center">
+    <div className="min-h-screen bg-gray-800 gap-3 flex flex-col items-center justify-center">
       <Link to="/" className="flex ms-2">
         <img
           src="https://flowbite.com/docs/images/logo.svg"

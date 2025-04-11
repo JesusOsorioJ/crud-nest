@@ -4,9 +4,9 @@ import { registerUser } from "../api/auth";
 import Swal from "sweetalert2";
 
 interface FormData {
-  email?: string;
-  password?: string;
-  role?: string;
+  email: string;
+  password: string;
+  role: string;
 }
 
 const Register = () => {
@@ -25,10 +25,10 @@ const Register = () => {
         Swal.fire("Registro exitoso");
         navigate("/login");
       } else {
-        Swal.fire("Registro fallido");
+        Swal.fire("Registro fallido", "Las credenciales no son válidas.", "error");
       }
     } catch {
-      Swal.fire("Error en el registro:");
+        Swal.fire("Error en el registro", "Hubo un problema con la conexión.", "error");
     }
   };
 
