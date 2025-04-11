@@ -26,8 +26,8 @@ La aplicación incluye:
 - [Estructura del Proyecto](#estructura-del-proyecto)
 - [Instalación y Ejecución](#instalación-y-ejecución)
   - [Configuración de Variables de Entorno](#configuración-de-variables-de-entorno)
-  - [Ejecutar con Nest CLI](#ejecutar-con-nest-cli)
   - [Ejecutar con Docker](#ejecutar-con-docker)
+  - [Ejecutar con Nest CLI](#ejecutar-con-nest-cli)
 - [Documentación Swagger](#documentación-swagger)
 - [Testing](#testing)
   - [Tests Unitarios](#tests-unitarios)
@@ -76,6 +76,7 @@ Estructura del Proyecto
 
 La estructura del repositorio es la siguiente:
 
+```
 repo/
 ├── back/ # Código del backend (NestJS)
 │ ├── src/
@@ -97,7 +98,7 @@ repo/
 │ ├── nginx.conf # Configuración de Nginx para producción
 │ └── package.json # Dependencias y scripts del frontend
 └── docker-compose.yml # Orquestador para levantar backend, frontend y PostgreSQL en contenedores
-
+```
 ---
 
 ## Instalación y Ejecución
@@ -110,14 +111,42 @@ Puedes copiarlos y renombrarlos a `.env` en cada carpeta.
 
 1. En el backend (carpeta "back"):
    - Copia el archivo `.env.example` y renómbralo a `.env`:
-     cp .env.example .env
-
+    ```
+     cp back/.env.example back/.env
+    ```
 
 2. En el frontend (carpeta "front"):
    - Copia el archivo `.env.example` y renómbralo a `.env`:
-     cp .env.example .env
+   ```
+     cp front/.env.example front/.env
+     ```
 
 Estas variables se utilizan en el código y se referencian en el archivo docker-compose mediante la opción env_file.
+
+### Ejecutar con Docker
+
+Desde la raíz del repositorio, ejecuta:
+
+Desde la raíz del proyecto (donde se encuentra `docker-compose.yml`):
+
+1. **Levantar los contenedores:**
+
+   ```bash
+   docker-compose up --build
+
+   ```
+
+2. Acceso:
+
+    - Frontend: http://localhost:5173
+
+    - Backend: http://localhost:3000
+
+    - Swagger: http://localhost:3000/api
+
+    - Base de datos PostgreSQL: en localhost:5432 (según configuraste en Docker Compose)
+
+
 
 ### Ejecutar con Nest CLI
 
@@ -151,29 +180,6 @@ Estas variables se utilizan en el código y se referencian en el archivo docker-
      npm run dev
      ```
      El frontend estará disponible en `http://localhost:5173`.
-
-### Ejecutar con Docker
-
-Desde la raíz del repositorio, ejecuta:
-
-Desde la raíz del proyecto (donde se encuentra `docker-compose.yml`):
-
-1. **Levantar los contenedores:**
-
-   ```bash
-   docker-compose up --build
-
-   ```
-
-2. Acceso:
-
-    - Frontend: http://localhost:5173
-
-    - Backend: http://localhost:3000
-
-    - Swagger: http://localhost:3000/api
-
-    - Base de datos PostgreSQL: en localhost:5432 (según configuraste en Docker Compose)
 
 ---
 
