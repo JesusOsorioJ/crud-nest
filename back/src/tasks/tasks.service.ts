@@ -29,6 +29,7 @@ export class TasksService {
     // Si el usuario no es ADMIN, filtrar solo sus tareas
     if (!user.roles.includes('ADMIN')) {
       query.where('task.userId = :userId', { userId: user.id });
+      queryAll.where('task.userId = :userId', { userId: user.id });
     }
 
     if (filters.status) {
