@@ -18,6 +18,11 @@ export interface Item {
   imageUrl?: string;
 }
 
+export interface UsernameRole {
+  username: string | null;
+  role: string | null;
+}
+
 const baseURL = import.meta.env.VITE_BACKEND_URL;
 const socket = io(baseURL);
 
@@ -25,12 +30,13 @@ function App() {
   const [send, setSend] = useState<boolean>(false);
   const [data, setData] = useState<Item[]>([]);
   const [form, setForm] = useState<Item>({});
+  const [usernameRole, setUsernameRole] = useState<UsernameRole>();
 
   const [filter, setFilter] = useState<string>("");
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(0);
   const [totalItems, setTotalItems] = useState<number>(0);
-  const limit = 5;
+  const limit = 2;
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -61,10 +67,10 @@ function App() {
     socket.on("taskCreated", handleTaskCreated);
     socket.on("taskUpdated", handleTaskUpdated);
 
-    return () => {
-      socket.off("taskCreated", handleTaskCreated);
-      socket.off("taskUpdated", handleTaskUpdated);
-    };
+    // return () => {
+    //   socket.off("taskCreated", handleTaskCreated);
+    //   socket.off("taskUpdated", handleTaskUpdated);
+    // };
   }, []);
 
   useEffect(() => {
@@ -73,6 +79,12 @@ function App() {
 
   useEffect(() => {
     filterPurchases(currentPage);
+  }, [currentPage]);
+
+  useEffect(() => {
+    const username = localStorage.getItem("username") ;
+    const role = localStorage.getItem("role");
+    setUsernameRole({username,role})
   }, [currentPage]);
 
   const filterPurchases = async (page: number): Promise<void> => {
@@ -95,8 +107,11 @@ function App() {
 
   return (
     <div className="flex flex-col gap-10 bg-gray-800 min-h-screen w-full p-10 text">
-      <div className="flex gap-2">
+      <div className="flex gap-4 items-center">
         <Language />
+        <p className="text-white uppercase">
+          {`${usernameRole?.username} - ${usernameRole?.role}`}
+        </p>
       </div>
 
       <div className="text-black flex flex-col gap-2">

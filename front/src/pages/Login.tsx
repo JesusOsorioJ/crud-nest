@@ -22,6 +22,8 @@ const Login = () => {
       });
 
       if (response && response.status === 200) {
+        localStorage.setItem("username", response.data.username);
+        localStorage.setItem("role", response.data.roles[0]);
         localStorage.setItem("access_token", response.data.access_token);
         localStorage.setItem("refresh_token", response.data.refresh_token);
         navigate("/");

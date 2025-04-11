@@ -51,7 +51,7 @@ export default function FilterTasks({
             defaultValue=""
             className="w-full rounded-md p-3 text-black focus:outline-none"
           >
-            <option value="">{t("all")}</option>
+            <option value="">---</option>
             <option value={TaskStatus.TODO}>TODO</option>
             <option value={TaskStatus.IN_PROGRESS}>IN_PROGRESS</option>
             <option value={TaskStatus.DONE}>DONE</option>

@@ -49,8 +49,8 @@ function TableItem({
     try {
       await deleteItem(id);
       const res = await getAllItem();
-      if (res?.data && Array.isArray(res.data)) {
-        setData(res.data);
+      if (res?.data.data && Array.isArray(res.data.data)) {
+        setData(res.data.data);
       }
       Swal.fire(t("deleted"), t("itemDeletedSuccessfully"), "success");
     } catch {

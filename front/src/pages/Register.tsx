@@ -73,8 +73,8 @@ const Register = () => {
               {...register("role")}
               className="w-full border border-gray-300 p-2 rounded"
             >
-              <option value="USER">{t("userRole")}</option>
-              <option value="ADMIN">{t("adminRole")}</option>
+              <option value="USER">USER</option>
+              <option value="ADMIN">ADMIN</option>
             </select>
           </div>
           <button
