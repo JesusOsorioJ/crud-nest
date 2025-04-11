@@ -8,11 +8,11 @@ import { UsersModule } from './users/users.module';
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'nozomi.proxy.rlwy.net',
-      port: 49857,
-      username: 'postgres',
-      password: 'NqiFckQizrMliXezSSgiIPPYpguvmapr',
-      database: 'railway',
+      host: process.env.DB_HOST,
+      port: parseInt(process.env.DB_PORT || "0") ,
+      username: process.env.DB_USERNAME,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_NAME,
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true, // Solo en desarrollo, usa migraciones en producción
     }),
